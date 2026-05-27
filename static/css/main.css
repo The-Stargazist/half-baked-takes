@@ -303,19 +303,15 @@ nav {
   right: 48px;
   white-space: nowrap;
   font-family: 'Caveat', 'Comic Sans MS', cursive;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--bark);
-  opacity: 1;
-  transition: opacity 0.4s ease;
   pointer-events: none;
   animation: doodle-bob 2.5s ease-in-out infinite alternate;
 }
-.toggle-doodle.hidden { opacity: 0; }
 @keyframes doodle-bob {
   from { transform: rotate(-4deg) translateY(0px); }
   to   { transform: rotate(-1deg) translateY(-3px); }
 }
-[data-theme="night"] .toggle-doodle { color: var(--bark); }
 
 /* ── Theme toggle button ── */
 .theme-toggle {
