@@ -31,6 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (toggle) toggle.querySelector('.theme-icon').textContent = theme === 'night' ? '☀️' : '🌙';
     if (theme === 'night') spawnFireflies();
     else clearFireflies();
+    // update doodle text then fade it out after first use
+    const doodle = document.getElementById('toggle-doodle');
+    if (doodle) {
+      doodle.textContent = theme === 'night' ? 'back to day ↗' : 'try night mode ↗';
+      setTimeout(() => doodle.classList.add('hidden'), 1800);
+    }
   }
 
   if (toggle) {
@@ -46,6 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const initTheme = html.getAttribute('data-theme');
   if (toggle) toggle.querySelector('.theme-icon').textContent = initTheme === 'night' ? '☀️' : '🌙';
   if (initTheme === 'night') spawnFireflies();
+  // hide doodle if user has already picked a theme before
+  const doodle = document.getElementById('toggle-doodle');
+  if (doodle) {
+    if (localStorage.getItem('theme')) doodle.classList.add('hidden');
+    else if (initTheme === 'night') doodle.textContent = 'back to day ↗';
+  }
   generateStars();
 
   /* ── Stars ── */
