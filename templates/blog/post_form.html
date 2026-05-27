@@ -17,9 +17,12 @@
     min-height: 420px !important;
     height: auto !important;
   }
-  .CodeMirror-cursor { border-left: 2px solid #2a2420 !important; }
-  .CodeMirror-selected { background: rgba(201,185,154,0.35) !important; }
-  .CodeMirror pre.CodeMirror-line, .CodeMirror pre.CodeMirror-line-like { color: #2a2420 !important; }
+  .EasyMDEContainer .CodeMirror .CodeMirror-cursor { border-left: 2px solid #2a2420 !important; }
+  .EasyMDEContainer .CodeMirror .CodeMirror-selected,
+  .EasyMDEContainer .CodeMirror .CodeMirror-selectedtext { background: rgba(201,185,154,0.45) !important; }
+  .EasyMDEContainer .CodeMirror pre.CodeMirror-line,
+  .EasyMDEContainer .CodeMirror pre.CodeMirror-line-like { color: #2a2420 !important; }
+  .EasyMDEContainer .CodeMirror * { color: #2a2420 !important; }
   .editor-toolbar {
     background: #f5f0e8 !important;
     border: 1.5px solid #d4cfc6 !important;
@@ -104,6 +107,21 @@
 </div>
 
 <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<style>
+  .CodeMirror { background: #ede6d6 !important; color: #2a2420 !important; }
+  .CodeMirror-scroll { background: #ede6d6 !important; }
+  .CodeMirror pre.CodeMirror-line span { color: #2a2420 !important; }
+  .CodeMirror-cursor { border-left: 2px solid #2a2420 !important; visibility: visible !important; }
+  .CodeMirror-placeholder { color: #a09080 !important; opacity: 1 !important; }
+  /* hide placeholder once editor has content */
+  .CodeMirror-focused .CodeMirror-placeholder { opacity: 0 !important; }
+
+  [data-theme="night"] .CodeMirror { background: #0b1a0e !important; color: #c0e0a0 !important; }
+  [data-theme="night"] .CodeMirror-scroll { background: #0b1a0e !important; }
+  [data-theme="night"] .CodeMirror pre.CodeMirror-line span { color: #c0e0a0 !important; }
+  [data-theme="night"] .CodeMirror-cursor { border-left-color: #c0e0a0 !important; }
+  [data-theme="night"] .CodeMirror-placeholder { color: #5c8a44 !important; }
+</style>
 <script>
   var easyMDE = new EasyMDE({
     element: document.getElementById('id_content'),

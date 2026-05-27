@@ -260,7 +260,7 @@ nav {
 .nav-inner {
   max-width:1200px; margin:0 auto; padding:0 2rem;
   display:flex; align-items:center; justify-content:space-between;
-  height:62px;
+  height:72px;
 }
 .nav-brand {
   font-family:'Playfair Display',serif;
@@ -294,23 +294,23 @@ nav {
 
 /* ── Toggle hint doodle ── */
 .toggle-hint-wrap {
-  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 0.1rem;
 }
 .toggle-doodle {
-  position: absolute;
-  right: 48px;
   white-space: nowrap;
   font-family: 'Caveat', 'Comic Sans MS', cursive;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--bark);
   pointer-events: none;
+  line-height: 1;
   animation: doodle-bob 2.5s ease-in-out infinite alternate;
 }
 @keyframes doodle-bob {
   from { transform: rotate(-4deg) translateY(0px); }
-  to   { transform: rotate(-1deg) translateY(-3px); }
+  to   { transform: rotate(-1deg) translateY(-2px); }
 }
 
 /* ── Theme toggle button ── */
@@ -320,7 +320,7 @@ nav {
   border:1.5px solid var(--mist);
   background:transparent; cursor:pointer;
   font-size:1rem;
-  margin-left:0.5rem;
+  margin-left:0;
   transition: all var(--t);
 }
 .theme-toggle:hover {
