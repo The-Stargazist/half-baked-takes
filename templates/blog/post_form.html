@@ -7,51 +7,57 @@
   /* Blend EasyMDE into the site theme */
   .EasyMDEContainer { border-radius: var(--radius); overflow: hidden; }
   .EasyMDEContainer .CodeMirror {
-    font-family: 'Lora', serif;
-    font-size: 1rem;
-    background: var(--parchment);
-    color: var(--ink);
-    border: 1.5px solid var(--mist);
-    border-top: none;
-    padding: 1rem;
-    min-height: 420px;
-    transition: background 0.6s ease, color 0.6s ease;
+    font-family: 'Lora', Georgia, serif !important;
+    font-size: 1rem !important;
+    background: #ede6d6 !important;
+    color: #2a2420 !important;
+    border: 1.5px solid #d4cfc6 !important;
+    border-top: none !important;
+    padding: 1rem !important;
+    min-height: 420px !important;
+    height: auto !important;
   }
-  .EasyMDEContainer .CodeMirror-focused { border-color: var(--warm-tan); }
+  .CodeMirror-cursor { border-left: 2px solid #2a2420 !important; }
+  .CodeMirror-selected { background: rgba(201,185,154,0.35) !important; }
+  .CodeMirror pre.CodeMirror-line, .CodeMirror pre.CodeMirror-line-like { color: #2a2420 !important; }
   .editor-toolbar {
-    background: var(--cream);
-    border: 1.5px solid var(--mist);
-    border-bottom: 1px solid var(--mist);
-    border-radius: var(--radius) var(--radius) 0 0;
-    transition: background 0.6s ease;
+    background: #f5f0e8 !important;
+    border: 1.5px solid #d4cfc6 !important;
+    border-bottom: 1px solid #d4cfc6 !important;
+    border-radius: 6px 6px 0 0 !important;
+    opacity: 1 !important;
   }
   .editor-toolbar button {
-    color: var(--dusk) !important;
-    border-radius: 4px;
-    transition: background 0.2s;
+    color: #3d3530 !important;
   }
   .editor-toolbar button:hover,
-  .editor-toolbar button.active { background: var(--mist) !important; }
-  .editor-toolbar i.separator { border-color: var(--mist); }
+  .editor-toolbar button.active {
+    background: #d4cfc6 !important;
+    border-color: #d4cfc6 !important;
+  }
+  .editor-statusbar {
+    background: #f5f0e8 !important;
+    color: #8b6f47 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.72rem !important;
+  }
   .editor-preview {
-    background: var(--parchment);
-    color: var(--ink);
-    font-family: 'Lora', serif;
-    font-size: 1rem;
-    line-height: 1.85;
-    padding: 1.5rem;
+    background: #ede6d6 !important;
+    color: #2a2420 !important;
+    font-family: 'Lora', serif !important;
+    font-size: 1rem !important;
+    line-height: 1.85 !important;
+    padding: 1.5rem !important;
   }
-  .editor-preview h1,.editor-preview h2,.editor-preview h3 {
-    font-family: 'Playfair Display', serif;
-    color: var(--dusk);
-    margin: 1.5rem 0 0.75rem;
-  }
-  .editor-statusbar { background: var(--cream); color: var(--bark); font-family: 'Inter',sans-serif; font-size:0.72rem; }
-  [data-theme="night"] .EasyMDEContainer .CodeMirror { background: var(--parchment); color: var(--ink); }
-  [data-theme="night"] .editor-toolbar { background: var(--cream); }
-  [data-theme="night"] .editor-preview { background: var(--parchment); color: var(--ink); }
-  [data-theme="night"] .editor-statusbar { background: var(--cream); }
-  [data-theme="night"] .CodeMirror-cursor { border-left-color: var(--ink); }
+  /* night mode */
+  [data-theme="night"] .EasyMDEContainer .CodeMirror { background: #0b1a0e !important; color: #c0e0a0 !important; border-color: #101e12 !important; }
+  [data-theme="night"] .CodeMirror-cursor { border-left-color: #c0e0a0 !important; }
+  [data-theme="night"] .CodeMirror pre.CodeMirror-line { color: #c0e0a0 !important; }
+  [data-theme="night"] .editor-toolbar { background: #060e08 !important; border-color: #101e12 !important; }
+  [data-theme="night"] .editor-toolbar button { color: #a8d088 !important; }
+  [data-theme="night"] .editor-toolbar button:hover { background: #101e12 !important; }
+  [data-theme="night"] .editor-statusbar { background: #060e08 !important; color: #5c8a44 !important; }
+  [data-theme="night"] .editor-preview { background: #0b1a0e !important; color: #c0e0a0 !important; }
 </style>
 {% endblock %}
 
