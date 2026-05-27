@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile — Half-Baked Takes{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <a class="back-link" href="{% url 'home' %}">Home</a>
+  <h1>Edit Profile</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <p class="settings-section-label">Photo</p>
+    {% if config.avatar_image %}
+      <img src="{{ config.avatar_image.url }}" alt="Current photo"
+           style="width:100px;height:100px;object-fit:cover;border-radius:12px;margin-bottom:0.75rem;display:block;">
+    {% endif %}
+    <div class="form-field">
+      <label for="id_avatar_image">Upload photo</label>
+      {{ form.avatar_image }}
+    </div>
+
+    <p class="settings-section-label">Identity</p>
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="id_owner_name">Name</label>
+        {{ form.owner_name }}{{ form.owner_name.errors }}
+      </div>
+      <div class="form-field">
+        <label for="id_tagline">Tagline</label>
+        {{ form.tagline }}{{ form.tagline.errors }}
+      </div>
+      <div class="form-field">
+        <label for="id_about">About</label>
+        {{ form.about }}{{ form.about.errors }}
+      </div>
+    </div>
+
+    <p class="settings-section-label">Social Links</p>
+    <div class="social-manager">
+      <div id="social-links-container"></div>
+      <button type="button" class="add-social-btn" id="add-social-btn">+ Add link</button>
+    </div>
+    <input type="hidden" id="socials-data-input" name="socials_data" value="">
+
+    <div class="btn-row">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a class="btn btn-secondary" href="{% url 'home' %}">Cancel</a>
+    </div>
+  </form>
+</div>
+<script>
+  document.getElementById('socials-data-input').value = '{{ socials_json|escapejs }}';
+</script>
+{% endblock %}

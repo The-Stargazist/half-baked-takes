@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="day">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}shadow.{% endblock %}</title>
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+</head>
+<body>
+
+<div id="scene" aria-hidden="true">
+  <div id="scene-sky"></div>
+  <div class="scene-sun"></div>
+  <div class="scene-clouds">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+  </div>
+  <div class="scene-birds">
+    <div class="bird b1"></div>
+    <div class="bird b2"></div>
+    <div class="bird b3"></div>
+  </div>
+  <div class="scene-hills">
+    <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,220 Q180,160 360,200 Q540,160 720,190 Q900,150 1080,185 Q1260,160 1440,185 L1440,320 L0,320 Z" fill="var(--hill1)" opacity="0.55"/>
+      <path d="M0,260 Q240,210 480,245 Q720,200 960,235 Q1200,205 1440,230 L1440,320 L0,320 Z" fill="var(--hill2)" opacity="0.7"/>
+      <path d="M0,295 Q360,260 720,280 Q1080,255 1440,275 L1440,320 L0,320 Z" fill="var(--hill3)" opacity="0.85"/>
+    </svg>
+  </div>
+  <div class="scene-waterfall">
+    <div class="wf-cliff"></div>
+    <div class="wf-mist"></div>
+  </div>
+  <div class="scene-moon"></div>
+  <div class="scene-forest">
+    <svg viewBox="0 0 1440 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="forest-fade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#020804"/>
+          <stop offset="100%" stop-color="#030f05"/>
+        </linearGradient>
+      </defs>
+      <path d="M-20,380 L-20,280 L20,220 L60,280 L80,200 L120,280 L160,180 L200,280 L240,200 L280,280 L320,160 L360,280 L400,190 L440,280 L480,175 L520,280 L560,200 L600,280 L640,170 L680,280 L720,185 L760,280 L800,165 L840,280 L880,195 L920,280 L960,175 L1000,280 L1040,185 L1080,280 L1120,160 L1160,280 L1200,180 L1240,280 L1280,170 L1320,280 L1360,190 L1400,280 L1460,280 L1460,380 Z" fill="url(#forest-fade)" opacity="0.8"/>
+      <path d="M-20,380 L-20,310 L0,230 L25,310 L50,200 L80,310 L110,180 L140,310 L170,210 L200,310 L230,175 L260,310 L290,195 L320,310 L355,170 L390,310 L420,190 L450,310 L480,165 L515,310 L548,185 L580,310 L615,175 L650,310 L685,160 L720,310 L755,180 L790,310 L825,170 L860,310 L895,185 L930,310 L965,160 L1000,310 L1035,175 L1070,310 L1105,185 L1140,310 L1175,165 L1210,310 L1245,180 L1280,310 L1315,175 L1350,310 L1385,190 L1420,310 L1460,310 L1460,380 Z" fill="#010604" opacity="0.95"/>
+    </svg>
+  </div>
+  <div class="scene-stars" id="stars-container"></div>
+  <div class="scene-fireflies" id="fireflies-container"></div>
+  <div class="scene-mist"></div>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="{% url 'home' %}">🍪 Half-Baked Takes</a>
+    <div class="nav-links">
+      {% if user.is_authenticated %}
+        <a href="{% url 'post_create' %}" class="btn-write">+ Write</a>
+        <a href="{% url 'site_settings' %}">Profile</a>
+        <form method="post" action="{% url 'logout' %}" style="display:inline">
+          {% csrf_token %}
+          <button type="submit" class="nav-logout-btn">Logout</button>
+        </form>
+      {% endif %}
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+{% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <div class="message">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  &copy; {% now "Y" %} &nbsp;·&nbsp; made with quiet mornings and too much coffee
+</footer>
+
+<button id="back-to-top" aria-label="Back to top">↑</button>
+
+<script src="{% static 'js/transitions.js' %}"></script>
+</body>
+</html>

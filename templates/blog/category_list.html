@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ category_label }} — shadow.{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{% url 'home' %}">Home</a>
+
+<div class="category-header">
+  <h1>{{ category_label }}</h1>
+  <p style="font-family:'Inter',sans-serif;font-size:0.85rem;color:var(--bark);">{{ posts.count }} post{{ posts.count|pluralize }}</p>
+</div>
+
+{% if user.is_authenticated %}
+<div style="margin-bottom:1.5rem;">
+  <a class="btn btn-primary" href="{% url 'post_create' %}">+ New Post</a>
+</div>
+{% endif %}
+
+<div class="post-list">
+  {% for post in posts %}
+  <a class="post-list-card" href="{{ post.get_absolute_url }}">
+    <h2>{{ post.title }}</h2>
+    <div class="summary">{{ post.summary }}</div>
+    <div class="meta">{{ post.created_at|date:"F j, Y" }}</div>
+  </a>
+  {% empty %}
+  <div class="empty-state" style="padding:3rem;text-align:center;">nothing here yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}

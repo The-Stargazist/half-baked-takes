@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Login — shadow.{% endblock %}
+
+{% block content %}
+<div class="login-box">
+  <h1>Login</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="id_username">Username</label>
+        {{ form.username }}{{ form.username.errors }}
+      </div>
+      <div class="form-field">
+        <label for="id_password">Password</label>
+        {{ form.password }}{{ form.password.errors }}
+      </div>
+    </div>
+    {% if form.non_field_errors %}
+      <div style="color:#b85450;font-family:'Inter',sans-serif;font-size:0.82rem;margin-top:0.75rem;">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+    <div class="btn-row">
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Sign in</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

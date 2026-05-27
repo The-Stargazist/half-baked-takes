@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — shadow.{% endblock %}
+
+{% block content %}
+<div class="post-detail">
+  {% if user.is_authenticated %}
+  <div class="post-actions">
+    <a class="btn btn-secondary" href="{% url 'post_edit' post.slug %}">Edit</a>
+    <a class="btn btn-danger" href="{% url 'post_delete' post.slug %}">Delete</a>
+  </div>
+  {% endif %}
+
+  <a class="back-link" href="{% url 'category_list' post.category %}">{{ post.get_category_display }}</a>
+
+  <div class="post-detail-header">
+    <a class="post-category-pill" href="{% url 'category_list' post.category %}">{{ post.get_category_display }}</a>
+    <h1>{{ post.title }}</h1>
+    <div class="meta">{{ post.created_at|date:"F j, Y" }}</div>
+  </div>
+
+  <div class="post-body">{{ content_html|safe }}</div>
+
+  {% if related %}
+  <div class="related-section">
+    <h3>More in {{ post.get_category_display }}</h3>
+    <div class="related-grid">
+      {% for r in related %}
+      <a class="related-card" href="{{ r.get_absolute_url }}">
+        <div class="related-card-title">{{ r.title }}</div>
+        <div class="related-card-date">{{ r.created_at|date:"M j, Y" }}</div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
