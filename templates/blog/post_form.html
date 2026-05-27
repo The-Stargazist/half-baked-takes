@@ -1,5 +1,59 @@
 {% extends "base.html" %}
-{% block title %}{{ action }} — shadow.{% endblock %}
+{% block title %}{{ action }} — Half-Baked Takes{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<style>
+  /* Blend EasyMDE into the site theme */
+  .EasyMDEContainer { border-radius: var(--radius); overflow: hidden; }
+  .EasyMDEContainer .CodeMirror {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    background: var(--parchment);
+    color: var(--ink);
+    border: 1.5px solid var(--mist);
+    border-top: none;
+    padding: 1rem;
+    min-height: 420px;
+    transition: background 0.6s ease, color 0.6s ease;
+  }
+  .EasyMDEContainer .CodeMirror-focused { border-color: var(--warm-tan); }
+  .editor-toolbar {
+    background: var(--cream);
+    border: 1.5px solid var(--mist);
+    border-bottom: 1px solid var(--mist);
+    border-radius: var(--radius) var(--radius) 0 0;
+    transition: background 0.6s ease;
+  }
+  .editor-toolbar button {
+    color: var(--dusk) !important;
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+  .editor-toolbar button:hover,
+  .editor-toolbar button.active { background: var(--mist) !important; }
+  .editor-toolbar i.separator { border-color: var(--mist); }
+  .editor-preview {
+    background: var(--parchment);
+    color: var(--ink);
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    line-height: 1.85;
+    padding: 1.5rem;
+  }
+  .editor-preview h1,.editor-preview h2,.editor-preview h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--dusk);
+    margin: 1.5rem 0 0.75rem;
+  }
+  .editor-statusbar { background: var(--cream); color: var(--bark); font-family: 'Inter',sans-serif; font-size:0.72rem; }
+  [data-theme="night"] .EasyMDEContainer .CodeMirror { background: var(--parchment); color: var(--ink); }
+  [data-theme="night"] .editor-toolbar { background: var(--cream); }
+  [data-theme="night"] .editor-preview { background: var(--parchment); color: var(--ink); }
+  [data-theme="night"] .editor-statusbar { background: var(--cream); }
+  [data-theme="night"] .CodeMirror-cursor { border-left-color: var(--ink); }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="form-page">
@@ -24,7 +78,7 @@
         {{ form.summary }}{{ form.summary.errors }}
       </div>
       <div class="form-field">
-        <label for="id_content">Content <span style="font-weight:300;text-transform:none;letter-spacing:0">(Markdown)</span></label>
+        <label>Content</label>
         {{ form.content }}{{ form.content.errors }}
       </div>
       <div class="form-field" style="flex-direction:row;align-items:center;gap:0.75rem;">
@@ -42,4 +96,27 @@
     </div>
   </form>
 </div>
+
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<script>
+  var easyMDE = new EasyMDE({
+    element: document.getElementById('id_content'),
+    spellChecker: false,
+    autosave: { enabled: true, uniqueId: 'post-{{ post.slug|default:"new" }}', delay: 3000 },
+    toolbar: [
+      'bold', 'italic', 'strikethrough', '|',
+      'heading-1', 'heading-2', 'heading-3', '|',
+      'quote', 'code', '|',
+      'unordered-list', 'ordered-list', '|',
+      'link', 'image', 'horizontal-rule', '|',
+      'preview', 'side-by-side', 'fullscreen', '|',
+      'guide'
+    ],
+    placeholder: 'Write something half-baked...',
+    status: ['lines', 'words'],
+    renderingConfig: {
+      singleLineBreaks: false,
+    },
+  });
+</script>
 {% endblock %}
