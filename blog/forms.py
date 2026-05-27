@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from .models import Post, SiteConfig
 
 
@@ -18,6 +19,13 @@ class PostForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['publish_at'].input_formats = ['%Y-%m-%dT%H:%M']
         self.fields['publish_at'].required = False
+
+    def clean_publish_at(self):
+        dt = self.cleaned_data.get('publish_at')
+        if dt and timezone.is_naive(dt):
+            # treat the browser's local datetime as IST and convert to UTC for storage
+            dt = timezone.make_aware(dt, timezone.get_current_timezone())
+        return dt
 
 
 class SiteConfigForm(forms.ModelForm):

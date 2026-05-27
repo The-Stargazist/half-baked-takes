@@ -77,7 +77,7 @@ def post_create(request):
             # If scheduled, ensure not marked published yet
             if post.publish_at and post.publish_at > timezone.now():
                 post.published = False
-                messages.success(request, f'Post scheduled for {post.publish_at.strftime("%b %d, %Y at %H:%M UTC")}.')
+                messages.success(request, f'Post scheduled for {post.publish_at.strftime("%b %d, %Y at %H:%M IST")}.')
             elif post.published:
                 messages.success(request, 'Post published.')
             else:
@@ -98,7 +98,7 @@ def post_edit(request, slug):
             updated = form.save(commit=False)
             if updated.publish_at and updated.publish_at > timezone.now():
                 updated.published = False
-                messages.success(request, f'Post scheduled for {updated.publish_at.strftime("%b %d, %Y at %H:%M UTC")}.')
+                messages.success(request, f'Post scheduled for {updated.publish_at.strftime("%b %d, %Y at %H:%M IST")}.')
             elif updated.published:
                 messages.success(request, 'Post updated & published.')
             else:
