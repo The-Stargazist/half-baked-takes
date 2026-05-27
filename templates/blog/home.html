@@ -106,8 +106,27 @@
 
 </div>
 
-{% if user.is_authenticated and drafts %}
+{% if user.is_authenticated and scheduled %}
 <div style="margin-top:3rem;">
+  <p class="sections-label">scheduled</p>
+  <div class="column-section" style="max-width:100%;">
+    {% for post in scheduled %}
+      <a class="post-card" href="{{ post.get_absolute_url }}">
+        <div class="post-card-meta">
+          <span class="post-card-badge" style="background:#e8f0d8;color:#5a6b4e;">scheduled</span>
+          <span class="post-card-badge">{{ post.get_category_display }}</span>
+          publishes {{ post.publish_at|date:"M j, Y · H:i" }} UTC
+        </div>
+        <div class="post-card-title">{{ post.title }}</div>
+        <div class="post-card-summary">{{ post.summary }}</div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% if user.is_authenticated and drafts %}
+<div style="margin-top:2rem;">
   <p class="sections-label">drafts</p>
   <div class="column-section" style="max-width:100%;">
     {% for post in drafts %}

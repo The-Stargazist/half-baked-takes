@@ -20,6 +20,26 @@
 
   <div class="post-body">{{ content_html|safe }}</div>
 
+  <!-- ── Share ── -->
+  {% if post.published %}
+  <div class="share-bar">
+    <span class="share-label">share</span>
+    <a class="share-btn" id="share-copy" href="#" title="Copy link">🔗 Copy link</a>
+    <a class="share-btn" href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url={{ request.build_absolute_uri }}" target="_blank" rel="noopener" title="Share on X">𝕏 Post</a>
+    <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener" title="Share on LinkedIn">in Share</a>
+  </div>
+  <script>
+    document.getElementById('share-copy').addEventListener('click', function(e) {
+      e.preventDefault();
+      navigator.clipboard.writeText(window.location.href).then(function() {
+        var btn = document.getElementById('share-copy');
+        btn.textContent = '✓ Copied!';
+        setTimeout(function() { btn.textContent = '🔗 Copy link'; }, 2000);
+      });
+    });
+  </script>
+  {% endif %}
+
   {% if related %}
   <div class="related-section">
     <h3>More in {{ post.get_category_display }}</h3>

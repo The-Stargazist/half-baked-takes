@@ -2,13 +2,20 @@ import json as _json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
+from django.utils import timezone
 from django.contrib import messages
 import markdown as md
 from .models import Post, SiteConfig
 from .forms import PostForm, SiteConfigForm
 
 
+def _auto_publish_scheduled():
+    """Flip published=True for any scheduled posts whose time has come."""
+    Post.objects.filter(published=False, publish_at__lte=timezone.now()).update(published=True, publish_at=None)
+
+
 def homepage(request):
+    _auto_publish_scheduled()
     published = Post.objects.filter(published=True)
     general  = list(published.filter(category='general')[:3])
     research = list(published.filter(category='research')[:3])
@@ -20,17 +27,20 @@ def homepage(request):
         while len(section) < 3 and overflow:
             section.append(overflow.pop(0))
 
-    drafts = Post.objects.filter(published=False).order_by('-created_at') if request.user.is_authenticated else []
+    drafts = Post.objects.filter(published=False, publish_at=None).order_by('-created_at') if request.user.is_authenticated else []
+    scheduled = Post.objects.filter(published=False, publish_at__isnull=False).order_by('publish_at') if request.user.is_authenticated else []
 
     return render(request, 'blog/home.html', {
         'general': general,
         'research': research,
         'projects': projects,
         'drafts': drafts,
+        'scheduled': scheduled,
     })
 
 
 def post_detail(request, slug):
+    _auto_publish_scheduled()
     if request.user.is_authenticated:
         post = get_object_or_404(Post, slug=slug)
     else:
@@ -64,11 +74,15 @@ def post_create(request):
             post = form.save(commit=False)
             if not post.slug:
                 post.slug = slugify(post.title)
-            post.save()
-            if post.published:
+            # If scheduled, ensure not marked published yet
+            if post.publish_at and post.publish_at > timezone.now():
+                post.published = False
+                messages.success(request, f'Post scheduled for {post.publish_at.strftime("%b %d, %Y at %H:%M UTC")}.')
+            elif post.published:
                 messages.success(request, 'Post published.')
             else:
                 messages.success(request, 'Draft saved.')
+            post.save()
             return redirect(post.get_absolute_url())
     else:
         form = PostForm()
@@ -81,8 +95,15 @@ def post_edit(request, slug):
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Post updated.')
+            updated = form.save(commit=False)
+            if updated.publish_at and updated.publish_at > timezone.now():
+                updated.published = False
+                messages.success(request, f'Post scheduled for {updated.publish_at.strftime("%b %d, %Y at %H:%M UTC")}.')
+            elif updated.published:
+                messages.success(request, 'Post updated & published.')
+            else:
+                messages.success(request, 'Draft saved.')
+            updated.save()
             return redirect(post.get_absolute_url())
     else:
         form = PostForm(instance=post)
@@ -106,7 +127,6 @@ def site_settings(request):
         form = SiteConfigForm(request.POST, request.FILES, instance=config)
         if form.is_valid():
             cfg = form.save(commit=False)
-            # Parse social links from the hidden JSON field
             raw = request.POST.get('socials_data', '[]')
             try:
                 socials = _json.loads(raw)

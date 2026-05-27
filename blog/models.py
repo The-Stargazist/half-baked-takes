@@ -18,7 +18,8 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    published = models.BooleanField(default=True)
+    published = models.BooleanField(default=False)
+    publish_at = models.DateTimeField(null=True, blank=True, help_text='Schedule for future publish (leave blank to publish now)')
 
     class Meta:
         ordering = ['-created_at']

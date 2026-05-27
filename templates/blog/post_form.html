@@ -43,6 +43,10 @@
         {{ form.published }}
         <label for="id_published" style="text-transform:none;letter-spacing:0;font-size:0.88rem;">Published</label>
       </div>
+      <div class="form-field">
+        <label for="id_publish_at">Schedule <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional — overrides Published checkbox)</span></label>
+        {{ form.publish_at }}{{ form.publish_at.errors }}
+      </div>
     </div>
     <div class="btn-row">
       <button type="submit" class="btn btn-primary">Save Post</button>
