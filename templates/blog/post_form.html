@@ -2,63 +2,14 @@
 {% block title %}{{ action }} — Half-Baked Takes{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
 <style>
-  /* Blend EasyMDE into the site theme */
-  .EasyMDEContainer { border-radius: var(--radius); overflow: hidden; }
-  .EasyMDEContainer .CodeMirror {
-    font-family: 'Lora', Georgia, serif !important;
-    font-size: 1rem !important;
-    background: #ede6d6 !important;
-    color: #2a2420 !important;
-    border: 1.5px solid #d4cfc6 !important;
-    border-top: none !important;
-    min-height: 420px !important;
+  #id_content {
+    min-height: 420px;
+    font-family: 'Lora', Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.75;
+    resize: vertical;
   }
-  .EasyMDEContainer .CodeMirror .CodeMirror-cursor { border-left: 2px solid #2a2420 !important; }
-  .EasyMDEContainer .CodeMirror .CodeMirror-selected,
-  .EasyMDEContainer .CodeMirror .CodeMirror-selectedtext { background: rgba(201,185,154,0.45) !important; }
-  .EasyMDEContainer .CodeMirror pre.CodeMirror-line,
-  .EasyMDEContainer .CodeMirror pre.CodeMirror-line-like { color: #2a2420 !important; }
-  .EasyMDEContainer .CodeMirror * { color: #2a2420 !important; }
-  .editor-toolbar {
-    background: #f5f0e8 !important;
-    border: 1.5px solid #d4cfc6 !important;
-    border-bottom: 1px solid #d4cfc6 !important;
-    border-radius: 6px 6px 0 0 !important;
-    opacity: 1 !important;
-  }
-  .editor-toolbar button {
-    color: #3d3530 !important;
-  }
-  .editor-toolbar button:hover,
-  .editor-toolbar button.active {
-    background: #d4cfc6 !important;
-    border-color: #d4cfc6 !important;
-  }
-  .editor-statusbar {
-    background: #f5f0e8 !important;
-    color: #8b6f47 !important;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 0.72rem !important;
-  }
-  .editor-preview {
-    background: #ede6d6 !important;
-    color: #2a2420 !important;
-    font-family: 'Lora', serif !important;
-    font-size: 1rem !important;
-    line-height: 1.85 !important;
-    padding: 1.5rem !important;
-  }
-  /* night mode */
-  [data-theme="night"] .EasyMDEContainer .CodeMirror { background: #0b1a0e !important; color: #c0e0a0 !important; border-color: #101e12 !important; }
-  [data-theme="night"] .CodeMirror-cursor { border-left-color: #c0e0a0 !important; }
-  [data-theme="night"] .CodeMirror pre.CodeMirror-line { color: #c0e0a0 !important; }
-  [data-theme="night"] .editor-toolbar { background: #060e08 !important; border-color: #101e12 !important; }
-  [data-theme="night"] .editor-toolbar button { color: #a8d088 !important; }
-  [data-theme="night"] .editor-toolbar button:hover { background: #101e12 !important; }
-  [data-theme="night"] .editor-statusbar { background: #060e08 !important; color: #5c8a44 !important; }
-  [data-theme="night"] .editor-preview { background: #0b1a0e !important; color: #c0e0a0 !important; }
 </style>
 {% endblock %}
 
@@ -85,7 +36,7 @@
         {{ form.summary }}{{ form.summary.errors }}
       </div>
       <div class="form-field">
-        <label>Content</label>
+        <label for="id_content">Content <span style="font-weight:300;text-transform:none;letter-spacing:0">(markdown)</span></label>
         {{ form.content }}{{ form.content.errors }}
       </div>
       <div class="form-field" style="flex-direction:row;align-items:center;gap:0.75rem;">
@@ -103,42 +54,4 @@
     </div>
   </form>
 </div>
-
-<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
-<style>
-  .CodeMirror { background: #ede6d6 !important; color: #2a2420 !important; }
-  .CodeMirror-scroll { background: #ede6d6 !important; }
-  .CodeMirror pre.CodeMirror-line span { color: #2a2420 !important; }
-  .CodeMirror-cursor { border-left: 2px solid #2a2420 !important; visibility: visible !important; }
-  .CodeMirror-placeholder { color: #a09080 !important; opacity: 1 !important; }
-  /* hide placeholder once editor has content */
-  .CodeMirror-focused .CodeMirror-placeholder { opacity: 0 !important; }
-
-  [data-theme="night"] .CodeMirror { background: #0b1a0e !important; color: #c0e0a0 !important; }
-  [data-theme="night"] .CodeMirror-scroll { background: #0b1a0e !important; }
-  [data-theme="night"] .CodeMirror pre.CodeMirror-line span { color: #c0e0a0 !important; }
-  [data-theme="night"] .CodeMirror-cursor { border-left-color: #c0e0a0 !important; }
-  [data-theme="night"] .CodeMirror-placeholder { color: #5c8a44 !important; }
-</style>
-<script>
-  var easyMDE = new EasyMDE({
-    element: document.getElementById('id_content'),
-    spellChecker: false,
-    autosave: { enabled: false },
-    toolbar: [
-      'bold', 'italic', 'strikethrough', '|',
-      'heading-1', 'heading-2', 'heading-3', '|',
-      'quote', 'code', '|',
-      'unordered-list', 'ordered-list', '|',
-      'link', 'image', 'horizontal-rule', '|',
-      'preview', 'side-by-side', 'fullscreen', '|',
-      'guide'
-    ],
-    placeholder: 'Write something half-baked...',
-    status: ['lines', 'words'],
-    renderingConfig: {
-      singleLineBreaks: false,
-    },
-  });
-</script>
 {% endblock %}
