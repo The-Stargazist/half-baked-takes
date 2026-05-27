@@ -105,4 +105,23 @@
   </div>
 
 </div>
+
+{% if user.is_authenticated and drafts %}
+<div style="margin-top:3rem;">
+  <p class="sections-label">drafts</p>
+  <div class="column-section" style="max-width:100%;">
+    {% for post in drafts %}
+      <a class="post-card" href="{{ post.get_absolute_url }}">
+        <div class="post-card-meta">
+          <span class="post-card-badge" style="background:#f5e6c8;color:#8b6f47;">draft</span>
+          <span class="post-card-badge">{{ post.get_category_display }}</span>
+          {{ post.created_at|date:"M j, Y" }}
+        </div>
+        <div class="post-card-title">{{ post.title }}</div>
+        <div class="post-card-summary">{{ post.summary }}</div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
 {% endblock %}

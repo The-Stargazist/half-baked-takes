@@ -20,15 +20,21 @@ def homepage(request):
         while len(section) < 3 and overflow:
             section.append(overflow.pop(0))
 
+    drafts = Post.objects.filter(published=False).order_by('-created_at') if request.user.is_authenticated else []
+
     return render(request, 'blog/home.html', {
         'general': general,
         'research': research,
         'projects': projects,
+        'drafts': drafts,
     })
 
 
 def post_detail(request, slug):
-    post = get_object_or_404(Post, slug=slug, published=True)
+    if request.user.is_authenticated:
+        post = get_object_or_404(Post, slug=slug)
+    else:
+        post = get_object_or_404(Post, slug=slug, published=True)
     content_html = md.markdown(post.content, extensions=['fenced_code', 'tables', 'nl2br'])
     related = Post.objects.filter(category=post.category, published=True).exclude(pk=post.pk)[:3]
     return render(request, 'blog/post_detail.html', {
@@ -59,7 +65,10 @@ def post_create(request):
             if not post.slug:
                 post.slug = slugify(post.title)
             post.save()
-            messages.success(request, 'Post published.')
+            if post.published:
+                messages.success(request, 'Post published.')
+            else:
+                messages.success(request, 'Draft saved.')
             return redirect(post.get_absolute_url())
     else:
         form = PostForm()
