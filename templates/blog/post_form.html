@@ -13,9 +13,7 @@
     color: #2a2420 !important;
     border: 1.5px solid #d4cfc6 !important;
     border-top: none !important;
-    padding: 1rem !important;
     min-height: 420px !important;
-    height: auto !important;
   }
   .EasyMDEContainer .CodeMirror .CodeMirror-cursor { border-left: 2px solid #2a2420 !important; }
   .EasyMDEContainer .CodeMirror .CodeMirror-selected,
@@ -126,7 +124,7 @@
   var easyMDE = new EasyMDE({
     element: document.getElementById('id_content'),
     spellChecker: false,
-    autosave: { enabled: true, uniqueId: 'post-{{ post.slug|default:"new" }}', delay: 3000 },
+    autosave: { enabled: false },
     toolbar: [
       'bold', 'italic', 'strikethrough', '|',
       'heading-1', 'heading-2', 'heading-3', '|',
