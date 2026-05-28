@@ -648,14 +648,12 @@ main { max-width:1200px; margin:0 auto; padding:2.5rem 2rem 4rem; }
   line-height:1.7;
   overflow-x:auto;
 }
-/* highlight.js overrides padding */
+/* highlight.js — let the theme control colors, just fix padding/radius */
 .post-body pre .hljs {
   padding:1.5rem !important;
   border-radius:10px;
-  background: #f2e9e1 !important;  /* rp overlay for day */
-}
-[data-theme="night"] .post-body pre .hljs {
-  background: #232634 !important;  /* frappe crust */
+  font-size:0.88rem;
+  line-height:1.7;
 }
 
 /* Language badge top-right like Obsidian */

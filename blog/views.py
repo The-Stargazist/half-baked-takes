@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
 from django.utils import timezone
 from django.contrib import messages
+from django.http import JsonResponse
 import markdown as md
 from .models import Post, SiteConfig
 from .forms import PostForm, SiteConfigForm
@@ -108,6 +109,18 @@ def post_edit(request, slug):
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_form.html', {'form': form, 'action': 'Edit Post', 'post': post})
+
+
+@login_required
+def upload_image(request):
+    import json
+    if request.method == 'POST' and request.FILES.get('image'):
+        img = request.FILES['image']
+        from django.core.files.storage import default_storage
+        path = default_storage.save(f'post-images/{img.name}', img)
+        url = request.build_absolute_uri(default_storage.url(path))
+        return JsonResponse({'url': url, 'markdown': f'![{img.name}]({url})'})
+    return JsonResponse({'error': 'No image'}, status=400)
 
 
 @login_required
