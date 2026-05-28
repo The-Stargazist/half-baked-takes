@@ -31,9 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (toggle) toggle.querySelector('.theme-icon').textContent = theme === 'night' ? '☀️' : '🌙';
     if (theme === 'night') spawnFireflies();
     else clearFireflies();
-    // update doodle text then fade it out after first use
     const doodle = document.getElementById('toggle-doodle');
     if (doodle) doodle.textContent = theme === 'night' ? 'day mode ↗' : 'night mode ↗';
+    // swap highlight.js stylesheet
+    const hljsDay   = document.getElementById('hljs-day');
+    const hljsNight = document.getElementById('hljs-night');
+    if (hljsDay && hljsNight) {
+      hljsDay.disabled   = (theme === 'night');
+      hljsNight.disabled = (theme !== 'night');
+    }
   }
 
   if (toggle) {
@@ -48,12 +54,32 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Initial state on load */
   const initTheme = html.getAttribute('data-theme');
   if (toggle) toggle.querySelector('.theme-icon').textContent = initTheme === 'night' ? '☀️' : '🌙';
-  if (initTheme === 'night') spawnFireflies();
+  if (initTheme === 'night') {
+    spawnFireflies();
+    const hljsDay   = document.getElementById('hljs-day');
+    const hljsNight = document.getElementById('hljs-night');
+    if (hljsDay && hljsNight) { hljsDay.disabled = true; hljsNight.disabled = false; }
+  }
   const doodle = document.getElementById('toggle-doodle');
   if (doodle) {
     doodle.textContent = initTheme === 'night' ? 'day mode ↗' : 'night mode ↗';
   }
   generateStars();
+
+  /* ── Syntax highlighting ── */
+  if (typeof hljs !== 'undefined') {
+    hljs.highlightAll();
+    // add language badge to each code block
+    document.querySelectorAll('pre code[class*="language-"]').forEach(block => {
+      const lang = block.className.replace(/.*language-(\w+).*/, '$1');
+      if (lang && lang !== block.className) {
+        const badge = document.createElement('span');
+        badge.className = 'code-lang-badge';
+        badge.textContent = lang;
+        block.parentElement.appendChild(badge);
+      }
+    });
+  }
 
   /* ── Stars ── */
   function generateStars() {
