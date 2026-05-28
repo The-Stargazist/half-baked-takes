@@ -1,6 +1,41 @@
 {% extends "base.html" %}
 {% block title %}{{ post.title }} — shadow.{% endblock %}
 
+{% block extra_head %}
+<style>{{ pygments_css }}</style>
+<style>
+  /* code block wrapper */
+  .post-body .highlight {
+    position: relative;
+    border-radius: 10px;
+    margin: 1.75rem 0;
+    overflow: hidden;
+    border: 1px solid var(--mist);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  .post-body .highlight pre {
+    margin: 0;
+    padding: 1.5rem;
+    overflow-x: auto;
+    background: none;
+    border-radius: 0;
+  }
+  /* language badge */
+  .post-body .highlight::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 0.5rem; right: 0.75rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--bark); opacity: 0.65;
+    pointer-events: none;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="post-detail">
   {% if user.is_authenticated %}
@@ -25,8 +60,8 @@
   <div class="share-bar">
     <span class="share-label">share</span>
     <a class="share-btn" id="share-copy" href="#" title="Copy link">🔗 Copy link</a>
-    <a class="share-btn" href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url={{ request.build_absolute_uri }}" target="_blank" rel="noopener" title="Share on X">𝕏 Post</a>
-    <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener" title="Share on LinkedIn">in Share</a>
+    <a class="share-btn" href="https://twitter.com/intent/tweet?text={{ post.title|urlencode }}&url={{ request.build_absolute_uri }}" target="_blank" rel="noopener">𝕏 Post</a>
+    <a class="share-btn" href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener">in Share</a>
   </div>
   <script>
     document.getElementById('share-copy').addEventListener('click', function(e) {
@@ -54,4 +89,15 @@
   </div>
   {% endif %}
 </div>
+
+<script>
+  // Add data-lang attribute to each highlight block for the CSS badge
+  document.querySelectorAll('.post-body .highlight').forEach(function(block) {
+    var code = block.querySelector('code');
+    if (code) {
+      var cls = code.className.match(/language-(\w+)/);
+      if (cls) block.setAttribute('data-lang', cls[1]);
+    }
+  });
+</script>
 {% endblock %}

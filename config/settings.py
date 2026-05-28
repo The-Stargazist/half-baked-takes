@@ -79,18 +79,26 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+# ── Supabase S3 Storage ──
+AWS_ACCESS_KEY_ID       = 'c063fb9b1f0a4b427be5afd96f0ab71e'
+AWS_SECRET_ACCESS_KEY   = '0334b5a353f272c046484b2d524f0e66c43bc3bfd4baca5c127c4cd1786f37a0'
+AWS_STORAGE_BUCKET_NAME = 'blog-images'
+AWS_S3_ENDPOINT_URL     = 'https://dssiztyqxicobrzuuzwb.supabase.co/storage/v1/s3'
+AWS_S3_REGION_NAME      = 'ap-south-1'
+AWS_S3_FILE_OVERWRITE   = False
+AWS_QUERYSTRING_AUTH    = False
+AWS_S3_CUSTOM_DOMAIN    = 'dssiztyqxicobrzuuzwb.supabase.co/storage/v1/object/public/blog-images'
+
 STORAGES = {
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
     'default': {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        'BACKEND': 'storages.backends.s3boto3.S3Boto3Storage',
     },
 }
 
-# Media files (uploaded photos)
-MEDIA_URL  = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = 'https://dssiztyqxicobrzuuzwb.supabase.co/storage/v1/object/public/blog-images/'
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/settings/'

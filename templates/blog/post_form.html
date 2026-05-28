@@ -91,6 +91,39 @@ document.addEventListener('DOMContentLoaded', function() {
     results.prepend(row);
   }
 });
+
+// Ctrl+V image paste into content textarea
+document.getElementById('id_content').addEventListener('paste', function(e) {
+  var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image') !== -1) {
+      e.preventDefault();
+      var file = items[i].getAsFile();
+      var label = document.getElementById('img-drop-label');
+      label.textContent = 'uploading pasted image...';
+      var fd = new FormData();
+      fd.append('image', file, 'pasted-image.png');
+      fd.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+      fetch('{% url "upload_image" %}', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(data => {
+          label.textContent = 'drag & drop an image here, or click to browse';
+          if (data.markdown) {
+            // insert at cursor position in textarea
+            var ta = document.getElementById('id_content');
+            var start = ta.selectionStart;
+            var end = ta.selectionEnd;
+            var before = ta.value.substring(0, start);
+            var after  = ta.value.substring(end);
+            ta.value = before + '\n' + data.markdown + '\n' + after;
+            ta.selectionStart = ta.selectionEnd = start + data.markdown.length + 2;
+            addResult(data.markdown, data.url);
+          }
+        });
+      break;
+    }
+  }
+});
 </script>
 {% endblock %}
 

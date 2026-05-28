@@ -6,8 +6,16 @@ from django.utils import timezone
 from django.contrib import messages
 from django.http import JsonResponse
 import markdown as md
+from pygments.formatters import HtmlFormatter
 from .models import Post, SiteConfig
 from .forms import PostForm, SiteConfigForm
+
+# Generate Pygments CSS once at startup — tango (day) + monokai (night)
+_PYGMENTS_CSS = (
+    HtmlFormatter(style='tango').get_style_defs('.highlight') +
+    '\n' +
+    HtmlFormatter(style='monokai').get_style_defs('[data-theme="night"] .highlight')
+)
 
 
 def _auto_publish_scheduled():
@@ -46,12 +54,17 @@ def post_detail(request, slug):
         post = get_object_or_404(Post, slug=slug)
     else:
         post = get_object_or_404(Post, slug=slug, published=True)
-    content_html = md.markdown(post.content, extensions=['fenced_code', 'tables', 'nl2br'])
+    content_html = md.markdown(post.content, extensions=[
+        'fenced_code', 'tables', 'nl2br', 'codehilite'
+    ], extension_configs={
+        'codehilite': {'css_class': 'highlight', 'guess_lang': True, 'linenums': False}
+    })
     related = Post.objects.filter(category=post.category, published=True).exclude(pk=post.pk)[:3]
     return render(request, 'blog/post_detail.html', {
         'post': post,
         'content_html': content_html,
         'related': related,
+        'pygments_css': _PYGMENTS_CSS,
     })
 
 
