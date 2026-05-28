@@ -126,14 +126,22 @@ def post_edit(request, slug):
 
 @login_required
 def upload_image(request):
-    import json
     if request.method == 'POST' and request.FILES.get('image'):
         img = request.FILES['image']
         from django.core.files.storage import default_storage
-        path = default_storage.save(f'post-images/{img.name}', img)
-        url = request.build_absolute_uri(default_storage.url(path))
-        return JsonResponse({'url': url, 'markdown': f'![{img.name}]({url})'})
-    return JsonResponse({'error': 'No image'}, status=400)
+        import traceback
+        try:
+            path = default_storage.save(f'post-images/{img.name}', img)
+            url = default_storage.url(path)
+            # make absolute if relative
+            if url.startswith('/'):
+                url = request.build_absolute_uri(url)
+            print(f'[upload_image] success: {url}')
+            return JsonResponse({'url': url, 'markdown': f'![{img.name}]({url})'})
+        except Exception as e:
+            traceback.print_exc()
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'No image provided'}, status=400)
 
 
 @login_required
